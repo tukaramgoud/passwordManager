@@ -1,9 +1,17 @@
 import {Component} from 'react'
 import {v4 as uuidV4} from 'uuid'
+import Box from './component/Box'
 import './App.css'
 
 class App extends Component {
-  state = {userList: [], website: '', name: '', password: ''}
+  state = {
+    userList: [],
+    website: '',
+    name: '',
+    password: '',
+    showPassword: false,
+    searchInput: '',
+  }
 
   enterWebsite = event => {
     this.setState({website: event.target.value})
@@ -32,9 +40,39 @@ class App extends Component {
     this.setState({name: '', website: '', password: ''})
   }
 
+  isShownPassword = () => {
+    this.setState(pervState => ({showPassword: !pervState.showPassword}))
+  }
+
+  deleteBox = id => {
+    const {userList} = this.state
+    const deletedList = userList.filter(eachOne => eachOne.id !== id)
+    this.setState({userList: deletedList})
+  }
+
+  changeSearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
+
+  getSearchResult = () => {
+    const {userList, searchInput} = this.state
+
+    return userList.filter(eachOne =>
+      eachOne.website.toLowerCase().includes(searchInput.toLowerCase()),
+    )
+  }
+
   render() {
-    const {website, name, password, userList} = this.state
-    console.log(userList)
+    const {
+      website,
+      name,
+      password,
+      userList,
+      showPassword,
+      searchInput,
+    } = this.state
+    const newList = this.getSearchResult()
+    // console.log(newList)
     return (
       <div className="app-container">
         <img
@@ -103,7 +141,7 @@ class App extends Component {
           <div className="one">
             <div className="two">
               <h1 className="main-heading">Your Passwords</h1>
-              <p className="style-digit"> 0 </p>
+              <p className="style-digit"> {userList.length} </p>
             </div>
             <div className="Search">
               <img
@@ -111,25 +149,53 @@ class App extends Component {
                 alt="search"
                 className="website-logo"
               />
-              <input className="search-input" placeholder="Search" />
+              <input
+                className="search-input"
+                placeholder="Search"
+                value={searchInput}
+                onChange={this.changeSearchInput}
+              />
             </div>
           </div>
           <hr />
           <div className="new-one">
             <div className="some">
-              <input type="checkbox" id="show" className="box" />
-              <label htmlFor="show" className="sub-heading">
+              <input
+                type="checkbox"
+                id="show"
+                className="box"
+                value={showPassword}
+                onClick={this.isShownPassword}
+              />
+              <label
+                htmlFor="show"
+                className="sub-heading"
+                onClick={this.isShownPassword}
+              >
                 Show Password
               </label>
             </div>
           </div>
-          <div className=" set-center">
-            <img
-              src="https://assets.ccbp.in/frontend/react-js/no-passwords-img.png"
-              alt="No Passwords"
-              className="image-sizing"
-            />
-          </div>
+          {userList.length !== 0 ? (
+            <ul className="unOrdered-list">
+              {newList.map(eachOne => (
+                <Box
+                  item={eachOne}
+                  key={eachOne.id}
+                  showPassword={showPassword}
+                  deleteBox={this.deleteBox}
+                />
+              ))}
+            </ul>
+          ) : (
+            <div className=" set-center">
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/no-passwords-img.png"
+                alt="No Passwords"
+                className="image-sizing"
+              />
+            </div>
+          )}
         </div>
       </div>
     )

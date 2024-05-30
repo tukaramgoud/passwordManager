@@ -1,0 +1,22 @@
+.box-styling {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: #64748b solid 2px;
+  border-radius: 10px;
+  width: 30%;
+  margin: 10px;
+}
+.stars-sizing {
+  height: 20px;
+}
+.button-sizing {
+  height: 30px;
+}
+.button-delete {
+  background-color: transparent;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}

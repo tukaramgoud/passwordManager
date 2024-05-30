@@ -168,3 +168,8 @@ body {
   font-size: 20px;
   font-weight: 700;
 }
+.unOrdered-list {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
